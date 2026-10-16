@@ -1,0 +1,173 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8\nLanguage: zh_Hans\n"
+
+msgid "Airoha SoC Status"
+msgstr "Airoha 芯片状态"
+
+msgid "Apply"
+msgstr "应用"
+
+msgid "Applying..."
+msgstr "正在应用…"
+
+msgid "CPU Cores"
+msgstr "CPU 核心数"
+
+msgid "CPU Frequency"
+msgstr "CPU 频率"
+
+msgid "Current Frequency"
+msgstr "当前频率"
+
+msgid "Governor"
+msgstr "调频策略"
+
+msgid "Max Frequency"
+msgstr "最高频率"
+
+msgid "Overclock"
+msgstr "超频"
+
+msgid "NPU & Offload Engine"
+msgstr "NPU 与卸载引擎"
+
+msgid "NPU Status"
+msgstr "NPU 状态"
+
+msgid "Frame Engine"
+msgstr "帧转发引擎"
+
+msgid "Firmware / Clock / Cores"
+msgstr "固件 / 时钟 / 核心"
+
+msgid "Reserved Memory"
+msgstr "保留内存"
+
+msgid "PPE Flow Offload Entries"
+msgstr "PPE 硬件流表"
+
+msgid "Index"
+msgstr "索引"
+
+msgid "State"
+msgstr "状态"
+
+msgid "Type"
+msgstr "类型"
+
+msgid "Original Flow"
+msgstr "原始流"
+
+msgid "New Flow"
+msgstr "新流"
+
+msgid "Ethernet"
+msgstr "以太网"
+
+msgid "Active"
+msgstr "运行中"
+
+msgid "Active (%s)"
+msgstr "运行中（%s）"
+
+msgid "Not Active"
+msgstr "未运行"
+
+msgid "Unknown"
+msgstr "未知"
+
+msgid "PSE Shared Buffer"
+msgstr "PSE 共享缓冲区"
+
+msgid "PSE Port Queue Status"
+msgstr "PSE 端口队列状态"
+
+msgid "Bound "
+msgstr "已绑定 "
+
+msgid "Total "
+msgstr "总计 "
+
+msgid "Cancel"
+msgstr "取消"
+
+msgid "Continue"
+msgstr "继续"
+
+msgid "Confirm overclock"
+msgstr "确认超频"
+
+msgid "Idle"
+msgstr "空闲"
+
+msgid "Off"
+msgstr "关闭"
+
+msgid "No clients"
+msgstr "没有客户端"
+
+msgid "Good"
+msgstr "良好"
+
+msgid "Fair"
+msgstr "一般"
+
+msgid "Poor"
+msgstr "较差"
+
+msgid "Band %d"
+msgstr "频段 %d"
+
+msgid "%d sta"
+msgstr "%d 个客户端"
+
+msgid "Manages: "
+msgstr "负责："
+
+msgid "PPE init, WDMA rings, flow stats"
+msgstr "PPE 初始化、WDMA 环形队列、流统计"
+
+msgid "Not available: unrecognised SoC"
+msgstr "不可用：未识别的芯片"
+
+msgid "devmem is not available on this build"
+msgstr "此固件未提供 devmem"
+
+msgid "HW Offload: %s%%"
+msgstr "硬件卸载：%s%%"
+
+msgid "Direct PLL write, %d-%d MHz. Tested up to %d MHz."
+msgstr "直接写入 PLL，范围 %d–%d MHz，已测试至 %d MHz。"
+
+msgid "CPU set to %d MHz"
+msgstr "CPU 已设为 %d MHz"
+
+msgid "Error: %s"
+msgstr "错误：%s"
+
+msgid "Failed: %s"
+msgstr "失败：%s"
+
+msgid "Overclock request failed: %s"
+msgstr "超频请求失败：%s"
+
+msgid "Could not set the governor: %s"
+msgstr "无法设置调频策略：%s"
+
+msgid "Could not set the maximum frequency: %s"
+msgstr "无法设置最高频率：%s"
+
+msgid "The frequency must be between %d and %d MHz"
+msgstr "频率必须在 %d 至 %d MHz 之间"
+
+msgid "%d MHz is above %d MHz, which is as far as this has been tested. The board may run unstable or stop responding until it is power cycled."
+msgstr "%d MHz 超过已测试的 %d MHz。设备可能不稳定或停止响应，需要断电重启。"
+
+msgid "Internal Switch (1G LAN3/4)"
+msgstr "内部交换机（千兆 LAN3/4）"
+
+msgid "Drop %s"
+msgstr "丢弃 %s"
+
+msgid "8x RISC-V via PCIe RAM"
+msgstr "8 核 RISC-V，通过 PCIe 内存通信"

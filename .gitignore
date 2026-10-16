@@ -1,0 +1,10 @@
+source/
+release/
+build.log
+build-config.diff
+source-commit.txt
+feeds-sources.txt
+feeds-commits.txt
+lucky-build.json
+release-notes.md
+__pycache__/

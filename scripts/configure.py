@@ -1,0 +1,49 @@
+#!/usr/bin/env python3
+"""Preserve upstream platform defaults, restrict profiles, then select applications."""
+import pathlib
+import re
+import sys
+
+source = pathlib.Path(sys.argv[1]).resolve()
+repo = pathlib.Path(__file__).resolve().parents[1]
+base = (source / 'configs/an7581.config').read_text()
+# Remove both old and new per-device Kconfig forms, including -usb-sfp variants.
+base = '\n'.join(line for line in base.splitlines() if not re.match(
+    r'(?:# )?CONFIG_TARGET_(?:DEVICE_)?airoha_an7581_DEVICE_', line)) + '\n'
+base = re.sub(r'(?:# )?CONFIG_TARGET_ALL_PROFILES(?:=.*| is not set)',
+              '# CONFIG_TARGET_ALL_PROFILES is not set', base)
+extra = (repo / 'config/packages.config').read_text()
+# Drop preexisting assignments to avoid relying on Kconfig duplicate precedence.
+keys = set(re.findall(r'^(?:# )?(CONFIG_[A-Za-z0-9_-]+)(?:=| is not set)', extra, re.M))
+base = '\n'.join(line for line in base.splitlines()
+                 if not any(line.startswith(k+'=') or line == '# '+k+' is not set' for k in keys)) + '\n'
+profiles = '\n'.join(
+    f'CONFIG_TARGET_DEVICE_airoha_an7581_DEVICE_{device}=y\n'
+    f'CONFIG_TARGET_DEVICE_PACKAGES_airoha_an7581_DEVICE_{device}=""'
+    for device in ('nokia_xg-040g-md-ubi', 'znxt_zn515xg-d'))
+(source / '.config').write_text(base + '\n' + profiles + '\n' + extra)
+defaults = source / 'files/etc/uci-defaults'
+defaults.mkdir(parents=True, exist_ok=True)
+(defaults / '99-opnwall-defaults').write_text('''#!/bin/sh
+# Fresh-image defaults; no operator identity or optical calibration is embedded.
+uci set network.lan.ipaddr='192.168.1.1'
+uci set network.lan.netmask='255.255.255.0'
+uci set luci.main.mediaurlbase='/luci-static/argon'
+uci set luci.main.lang='zh_cn'
+uci commit network
+uci commit luci
+passwd -d root
+exit 0
+''')
+(defaults / '99-opnwall-defaults').chmod(0o755)
+# Fix the empty-argument/getopts bug previously verified on these devices.
+init = source / 'feeds/ssr/luci-app-ssr-plus/root/etc/init.d/shadowsocksr'
+if not init.exists():
+    raise SystemExit('SSR init script path changed; inspect the upstream package before building')
+s = init.read_text()
+old = '"$(get_arg_out)" "$(gfwmode)" "$ARG_UDP" "$ARG_UDP_RULES" "$ARG_A"'
+if old in s:
+    s = s.replace(old, '$(get_arg_out) $(gfwmode) $ARG_UDP $ARG_UDP_RULES $ARG_A')
+    init.write_text(s)
+else:
+    print('SSR optional-argument expression changed upstream; no legacy patch required')

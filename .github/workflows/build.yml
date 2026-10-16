@@ -1,0 +1,101 @@
+name: Build PonWrt
+on:
+  workflow_dispatch:
+  schedule:
+    # Friday 00:00 Asia/Shanghai = Thursday 16:00 UTC
+    - cron: '0 16 * * 4'
+permissions:
+  contents: read
+concurrency:
+  group: ponwrt-release
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+    env:
+      TZ: Asia/Shanghai
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare disk and dependencies
+        run: |
+          sudo rm -rf /usr/local/lib/android /opt/ghc /usr/share/dotnet /opt/hostedtoolcache/CodeQL
+          sudo docker image prune --all --force || true
+          sudo apt-get update
+          sudo apt-get install -y build-essential clang flex bison g++ gawk gcc-multilib g++-multilib gettext git libncurses-dev libssl-dev python3 python3-setuptools python3-pyelftools rsync swig unzip zlib1g-dev file wget curl ccache libelf-dev libzstd-dev zstd libgnutls28-dev help2man libtool-bin autoconf automake pkgconf xsltproc device-tree-compiler
+          df -h
+      - name: Fetch latest source and feeds
+        run: bash scripts/prepare.sh
+      - name: Restore source download cache
+        uses: actions/cache@v4
+        with:
+          path: source/dl
+          key: ponwrt-downloads-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: ponwrt-downloads-${{ runner.os }}-
+      - name: Configure devices, packages and latest Lucky
+        run: |
+          python3 scripts/lucky_latest.py source
+          python3 scripts/configure.py source
+          cd source
+          make defconfig
+          python3 ../scripts/check_config.py .config
+          ./scripts/diffconfig.sh > ../build-config.diff
+          git rev-parse HEAD > ../source-commit.txt
+          ./scripts/feeds list -s > ../feeds-sources.txt
+          for feed in feeds/*; do
+            if [ -d "$feed/.git" ]; then printf '%s %s\n' "$feed" "$(git -C "$feed" rev-parse HEAD)"; fi
+          done > ../feeds-commits.txt
+      - name: Download sources
+        run: |
+          cd source
+          make download -j8
+          find dl -type f -size -1024c -delete
+          make download -j4
+      - name: Compile both device images
+        run: |
+          set -o pipefail
+          cd source
+          make -j2 V=s 2>&1 | tee ../build.log
+      - name: Collect and verify firmware outputs
+        run: python3 scripts/collect.py source/bin/targets/airoha/an7581 release
+      - name: Upload successful firmware
+        uses: actions/upload-artifact@v4
+        with:
+          name: ponwrt-firmware
+          path: release/
+          if-no-files-found: error
+          retention-days: 14
+      - name: Upload build diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-diagnostics
+          path: |
+            build.log
+            build-config.diff
+            source-commit.txt
+            feeds-sources.txt
+            feeds-commits.txt
+            lucky-build.json
+            easytier-version.txt
+            source/logs/
+          if-no-files-found: ignore
+          retention-days: 7
+  publish:
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      TZ: Asia/Shanghai
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: ponwrt-firmware
+          path: release
+      - name: Publish complete release, then remove older managed releases
+        run: bash scripts/publish.sh
