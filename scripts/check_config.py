@@ -8,7 +8,7 @@ actual = set(re.findall(r'^CONFIG_TARGET_DEVICE_airoha_an7581_DEVICE_([^=]+)=y$'
 if actual != expected:
     raise SystemExit(f'Device selection mismatch: {actual} != {expected}')
 required = ['luci-app-store', 'luci-app-ssr-plus', 'xray-core', 'mihomo',
-            'lucky', 'luci-app-lucky', 'easytier', 'luci-app-easytier',
+            'tar', 'xz-utils', 'lucky', 'luci-app-lucky', 'easytier', 'luci-app-easytier',
             'luci-app-upnp', 'luci-app-airoha-npu', 'luci-app-iptv',
             'luci-theme-argon', 'openssh-sftp-server', 'kmod-nft-tproxy', 'kmod-nft-socket',
             'luci-i18n-ssr-plus-zh-cn', 'luci-i18n-lucky-zh-cn',

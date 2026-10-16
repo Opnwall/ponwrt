@@ -36,7 +36,7 @@
 - NPU：https://github.com/rchen14b/luci-app-airoha-npu
 - Argon、UPnP：PonWrt 的 LuCI feed。
 
-工作流基于上游完整 AN7581 配置，只启用上述两个 Profile。`make defconfig` 后检查必需插件，若上游更名或缺失，构建会失败，避免发布缺少应用的镜像。
+工作流基于上游完整 AN7581 配置，只启用上述两个 Profile。feeds 全部更新，但仅安装平台已选包、指定插件及其依赖，避免无关桌面/多媒体包带来的 Kconfig 冲突。显式启用 tar 的 XZ 依赖，防止 iStore 被 Kconfig 取消选择。`make defconfig` 后检查必需插件，若上游更名或缺失，构建会失败，避免发布缺少应用的镜像。
 
 Lucky 的版本与压缩包 SHA256 写入包定义；如果 GitHub 提供 asset digest，会额外比对。SSR 包保留之前排查确认的空参数/getopts 修补。
 

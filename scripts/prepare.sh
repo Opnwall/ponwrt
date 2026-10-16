@@ -9,7 +9,7 @@ src-git lucky https://github.com/gdy666/luci-app-lucky.git
 src-git easytier https://github.com/EasyTier/luci-app-easytier.git
 FEEDS
 ./scripts/feeds update -a
-./scripts/feeds install -a
+python3 ../scripts/install_selected_feeds.py
 # Explicitly prefer these maintainers when another feed has the same package.
 ./scripts/feeds install -f -p istore luci-app-store luci-lib-taskd luci-lib-xterm taskd
 ./scripts/feeds install -f -p ssr luci-app-ssr-plus xray-core mihomo
