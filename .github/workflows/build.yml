@@ -61,7 +61,7 @@ jobs:
       - name: Collect and verify firmware outputs
         run: python3 scripts/collect.py source/bin/targets/airoha/an7581 release
       - name: Upload successful firmware
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: ponwrt-firmware
           path: release/
@@ -69,7 +69,7 @@ jobs:
           retention-days: 14
       - name: Upload build diagnostics
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: build-diagnostics
           path: |
@@ -99,7 +99,7 @@ jobs:
       TZ: Asia/Shanghai
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@v8
         with:
           name: ponwrt-firmware
           path: release

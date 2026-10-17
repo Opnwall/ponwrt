@@ -47,3 +47,18 @@ if old in s:
     init.write_text(s)
 else:
     print('SSR optional-argument expression changed upstream; no legacy patch required')
+
+# Package-host tools are staged in hostpkg, not the tools/ host directory.
+# Both SSR core recipes use upx/host but older recipes reference the tools path.
+for package in ('mihomo', 'xray-core'):
+    recipe = source / 'feeds/ssr' / package / 'Makefile'
+    content = recipe.read_text()
+    if 'upx/host' not in content:
+        raise SystemExit(f'{package}: UPX host dependency changed; inspect upstream recipe')
+    old_tool = '$(STAGING_DIR_HOST)/bin/upx'
+    new_tool = '$(STAGING_DIR_HOSTPKG)/bin/upx'
+    if old_tool in content:
+        recipe.write_text(content.replace(old_tool, new_tool))
+        print(f'{package}: corrected UPX path to STAGING_DIR_HOSTPKG')
+    elif new_tool not in content:
+        raise SystemExit(f'{package}: UPX install command changed; inspect upstream recipe')
