@@ -62,3 +62,12 @@ for package in ('mihomo', 'xray-core'):
         print(f'{package}: corrected UPX path to STAGING_DIR_HOSTPKG')
     elif new_tool not in content:
         raise SystemExit(f'{package}: UPX install command changed; inspect upstream recipe')
+
+# miniupnpd 2.3.11 contains the permission-parser rewrite already.
+# The feed still carries its old backport and logging hunks for older sources.
+miniupnpd = source / 'feeds/packages/net/miniupnpd'
+if re.search(r'^PKG_VERSION:=2\.3\.11$', (miniupnpd / 'Makefile').read_text(), re.M):
+    (miniupnpd / 'patches/020-descr-filter-fix.patch').unlink(missing_ok=True)
+    (miniupnpd / 'patches/040-improve-logging.patch').write_text(
+        (repo / 'config/miniupnpd-2.3.11-logging.patch').read_text())
+    print('miniupnpd 2.3.11: removed integrated parser backport and rebased logging patch')
