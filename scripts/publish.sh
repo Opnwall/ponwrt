@@ -6,7 +6,7 @@ cat > release-notes.md <<NOTES
 <!-- ponwrt-weekly-managed -->
 PonWrt 自动构建：北京时间 $(date '+%Y-%m-%d %H:%M:%S')。
 
-设备：nokia_xg-040g-md-ubi、znxt_zn515xg-d。请使用对应型号的文件。
+设备：nokia_xg-040g-md-ubi、znxt_zn515xg-d、fiberhome_hg5585f-ct。请使用对应型号的文件。
 
 包含 iStore、SSR Plus+（Xray / Mihomo）、Lucky、EasyTier、UPnP、Airoha NPU 和 IPTV；默认 Argon 中文界面、192.168.1.1、root 空密码。带 SFTP 文件服务。
 

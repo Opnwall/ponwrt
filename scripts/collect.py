@@ -8,7 +8,7 @@ import sys
 build, output = map(pathlib.Path, sys.argv[1:3])
 output.mkdir(parents=True, exist_ok=True)
 profiles = json.loads((build/'profiles.json').read_text())['profiles']
-for device in ('nokia_xg-040g-md-ubi', 'znxt_zn515xg-d'):
+for device in ('nokia_xg-040g-md-ubi', 'znxt_zn515xg-d', 'fiberhome_hg5585f-ct'):
     info = profiles[device]
     images = [image for image in info['images']
               if image.get('name', '').endswith('.itb')]

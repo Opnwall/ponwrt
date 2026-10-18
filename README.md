@@ -8,6 +8,7 @@
 | --- | --- |
 | Nokia XG-040G-MD UBI | `nokia_xg-040g-md-ubi` |
 | ZNXT ZN515XG-D | `znxt_zn515xg-d` |
+| FiberHome HG5585F CT | `fiberhome_hg5585f-ct` |
 
 - 默认地址：`192.168.1.1`，用户名 `root`，密码为空。
 - 默认主题：Argon，简体中文。

@@ -20,7 +20,7 @@ base = '\n'.join(line for line in base.splitlines()
 profiles = '\n'.join(
     f'CONFIG_TARGET_DEVICE_airoha_an7581_DEVICE_{device}=y\n'
     f'CONFIG_TARGET_DEVICE_PACKAGES_airoha_an7581_DEVICE_{device}=""'
-    for device in ('nokia_xg-040g-md-ubi', 'znxt_zn515xg-d'))
+    for device in ('nokia_xg-040g-md-ubi', 'znxt_zn515xg-d', 'fiberhome_hg5585f-ct'))
 (source / '.config').write_text(base + '\n' + profiles + '\n' + extra)
 defaults = source / 'files/etc/uci-defaults'
 defaults.mkdir(parents=True, exist_ok=True)
