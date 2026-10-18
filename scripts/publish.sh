@@ -20,13 +20,19 @@ NOTES
 gh release create "$TAG" release/* --draft --target "$GITHUB_SHA" --title "PonWrt $(date +%Y-%m-%d)" --notes-file release-notes.md
 python3 - <<'PY'
 import json, os, pathlib, subprocess
-r=json.loads(subprocess.check_output(['gh','api',f'repos/{os.environ["GH_REPO"]}/releases/tags/{os.environ["TAG"]}']))
+# GitHub's tag endpoint may return 404 for an unpublished draft.
+pages=json.loads(subprocess.check_output(['gh','api','--paginate','--slurp',f'repos/{os.environ["GH_REPO"]}/releases?per_page=100']))
+matches=[r for page in pages for r in page if r['tag_name']==os.environ['TAG'] and r['draft']]
+if len(matches) != 1:
+    raise SystemExit('Expected exactly one matching draft; previous release is preserved')
+r=matches[0]
 actual={a['name']: a['size'] for a in r['assets']}
 expected={p.name: p.stat().st_size for p in pathlib.Path('release').iterdir() if p.is_file()}
 if expected != actual:
     raise SystemExit('Uploaded asset list/size mismatch; previous release is preserved')
+pathlib.Path('release-id.txt').write_text(str(r['id']))
 PY
-gh release edit "$TAG" --draft=false --latest
+gh api --method PATCH "repos/${GH_REPO}/releases/$(cat release-id.txt)" -F draft=false -f make_latest=true > published-release.json
 # Delete only releases created by this workflow, after publication succeeds.
 python3 - <<'PY'
 import json, os, subprocess
