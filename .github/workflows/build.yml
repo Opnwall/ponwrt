@@ -2,8 +2,8 @@ name: Build PonWrt
 on:
   workflow_dispatch:
   schedule:
-    # Friday 00:00 Asia/Shanghai = Thursday 16:00 UTC
-    - cron: '0 16 * * 4'
+    # Monday 00:10 Asia/Shanghai = Sunday 16:10 UTC
+    - cron: '10 16 * * 0'
 permissions:
   contents: read
 concurrency:

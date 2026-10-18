@@ -19,7 +19,7 @@
 
 ## 触发与下载
 
-每周五 **北京时间 00:00** 自动构建（GitHub cron 为 UTC 周四 16:00）。GitHub 的定时队列可能延迟执行。也可在 Actions → Build PonWrt → Run workflow 手动触发。
+每周一 **北京时间 00:10** 自动构建（GitHub cron 为 UTC 周日 16:10）。GitHub 的定时队列可能延迟执行。也可在 Actions → Build PonWrt → Run workflow 手动触发。
 
 成功后在 Releases 下载各机型自己的 `sysupgrade.itb`，以及生成的恢复镜像。附件包含 SHA256、源码与 feeds 提交、构建配置和 Lucky 版本记录。
 
