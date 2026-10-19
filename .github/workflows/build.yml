@@ -31,8 +31,9 @@ jobs:
         uses: actions/cache@v5
         with:
           path: source/dl
-          key: ponwrt-downloads-${{ runner.os }}-${{ github.run_id }}
-          restore-keys: ponwrt-downloads-${{ runner.os }}-
+          # v2 excludes caches damaged by the former recursive small-file cleanup.
+          key: ponwrt-downloads-v2-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: ponwrt-downloads-v2-${{ runner.os }}-
       - name: Configure devices, packages and latest Lucky
         run: |
           python3 scripts/lucky_latest.py source
@@ -51,8 +52,6 @@ jobs:
         run: |
           cd source
           make download -j8
-          find dl -type f -size -1024c -delete
-          make download -j4
       - name: Compile both device images
         run: |
           set -o pipefail
